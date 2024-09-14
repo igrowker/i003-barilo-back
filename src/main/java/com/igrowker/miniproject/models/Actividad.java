@@ -3,21 +3,19 @@ package com.igrowker.miniproject.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.List;
+
+import java.math.BigDecimal;
 
 @Getter
 @Setter
 @Entity
-public class Grupo {
-
+public class Actividad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private long id;
     private String nombre;
-    private int cantidadEstudiantes;
-
-    @OneToMany(mappedBy = "grupo")
-    private List<Usuario> estudiantes;
-
+    private BigDecimal precio;
+    @ManyToOne
+    @JoinColumn(name = "destino_id")
+    private Destino destino;
 }

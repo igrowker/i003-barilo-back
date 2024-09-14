@@ -14,5 +14,6 @@ public class Crowdfunding {
     private BigDecimal montoRecaudado;
     private LocalDate fechaCierre;
     @ManyToOne
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 }
