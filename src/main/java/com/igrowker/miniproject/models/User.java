@@ -1,29 +1,28 @@
 package com.igrowker.miniproject.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
-public class Usuario {
+@Table(name = "actividades")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String nombre;
+    private String name;
     private String email;
-    private BigDecimal saldoPendiente;
-
+    private BigDecimal pendingBalance;
     @ManyToOne
-    @JoinColumn(name = "grupo_id")
-    private Grupo grupo;
-
-    @OneToMany(mappedBy = "usuario")
+    @JoinColumn(name = "group_id")
+    private Group group;
+    @OneToMany(mappedBy = "user")
     private List<Crowdfunding> crowdfundings;
 }

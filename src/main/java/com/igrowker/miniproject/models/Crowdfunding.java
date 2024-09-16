@@ -4,16 +4,22 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
+@Table(name = "crowfundings")
 public class Crowdfunding {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private BigDecimal montoObjetivo;
-    private BigDecimal montoRecaudado;
-    private LocalDate fechaCierre;
+    private BigDecimal targetAmount;
+    private BigDecimal collectedAmount;
+    private LocalDate endDate;
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    @JoinColumn(name = "user_id")
+    private User user;
 }
