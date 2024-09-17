@@ -4,6 +4,7 @@ import com.igrowker.miniproject.auth.dto.JwtResponseDto;
 import com.igrowker.miniproject.auth.dto.LoginDto;
 import com.igrowker.miniproject.auth.dto.RegisterDto;
 import com.igrowker.miniproject.auth.jwt.JwtService;
+import com.igrowker.miniproject.dtos.UserDto;
 import com.igrowker.miniproject.exceptions.BadCredentialsException;
 import com.igrowker.miniproject.exceptions.ConflictException;
 import com.igrowker.miniproject.exceptions.NotFoundException;
@@ -11,6 +12,7 @@ import com.igrowker.miniproject.models.Role;
 import com.igrowker.miniproject.models.User;
 import com.igrowker.miniproject.repositories.RoleRepository;
 import com.igrowker.miniproject.repositories.UserRepository;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -72,5 +74,15 @@ public class AuthServiceImpl implements AuthService{
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Credenciales inválidas!");
         }
+    }
+
+    @Override
+    public Long getIdByLoguedUser(HttpHeaders headers) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new NotFoundException("Usuario no encontrado"));
+        return user.getId(); // retorna el ID del usuario logueado por medio del JWT
     }
 }
