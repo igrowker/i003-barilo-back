@@ -9,4 +9,5 @@ public class RegisterDto {
     private String name;
     private String mail;
     private String password;
+    private String role;
 }
