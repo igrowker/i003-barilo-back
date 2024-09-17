@@ -15,11 +15,13 @@ public class Travel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "destination_id")
+    @JoinColumn(name = "destination_id", nullable = false)
     private Destination destination;
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPrice;
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal costPerStudent;
     @ManyToOne
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 }

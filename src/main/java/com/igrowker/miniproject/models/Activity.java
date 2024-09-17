@@ -18,9 +18,11 @@ public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
     @ManyToOne
-    @JoinColumn(name = "destination_id")
+    @JoinColumn(name = "destination_id", nullable = false)
     private Destination destination;
 }

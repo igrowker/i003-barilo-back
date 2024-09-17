@@ -16,15 +16,23 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
+    private String password;
+    @Column(precision = 10, scale = 2)
     private BigDecimal pendingBalance;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
     @ManyToMany
     @JoinTable(
       name = "user_group",
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "group_id"))
-private List<Group> groups;
+    private List<Group> groups;
     @OneToMany(mappedBy = "user")
     private List<Crowdfunding> crowdfundings;
 }
