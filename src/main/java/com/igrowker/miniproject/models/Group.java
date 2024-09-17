@@ -16,7 +16,7 @@ public class Group {
     private Long id;
     private String name;
     private Integer studentsQuantity;
-    @OneToMany(mappedBy = "group")
-    private List<User> students;
+    @ManyToMany(mappedBy = "groups")
+    private List<User> users;
 
 }

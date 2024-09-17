@@ -11,18 +11,20 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "actividades")
+@Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String email;
     private BigDecimal pendingBalance;
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    private Group group;
+    @ManyToMany
+    @JoinTable(
+      name = "user_group",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "group_id"))
+private List<Group> groups;
     @OneToMany(mappedBy = "user")
     private List<Crowdfunding> crowdfundings;
 }
