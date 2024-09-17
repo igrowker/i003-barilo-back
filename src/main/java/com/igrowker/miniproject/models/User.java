@@ -22,6 +22,7 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String password;
+    @Column(precision = 10, scale = 2)
     private BigDecimal pendingBalance;
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
