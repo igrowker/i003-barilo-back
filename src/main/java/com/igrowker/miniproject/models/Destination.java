@@ -21,13 +21,13 @@ public class Destination {
     private String city;
     private String description;
     @OneToMany(mappedBy = "destination", cascade =CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Travel> travels; //¿Necesitaremos consultar los viajes a cada destination?
+    private List<Travel> travels; //¿Necesitaremos consultar los viajes a cada destinationName?
     @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Accommodation> accommodations; //puse esto para que cada destination pueda acceder a los alojamientos
+    private List<Accommodation> accommodations; //puse esto para que cada destinationName pueda acceder a los alojamientos
     @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Meal> meals;  //Comidas que tiene ese destination
+    private List<Meal> meals;  //Comidas que tiene ese destinationName
     @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transport> transports; //da acceso al listado de transportes
     @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Activity> activities; //accede al listado de activiades que ofrece cada destination.
+    private List<Activity> activities; //accede al listado de activiades que ofrece cada destinationName.
 }
