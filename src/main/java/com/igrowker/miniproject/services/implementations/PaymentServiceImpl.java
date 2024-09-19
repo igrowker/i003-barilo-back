@@ -58,4 +58,10 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setUser(user);
         return paymentMapper.toPaymentDto(paymentRepository.save(payment));
     }
+
+    @Override
+    public List<PaymentDto> getPaymentByUserId(HttpHeaders headers) {
+        Long userId = authService.getIdByLoguedUser(headers);
+        return paymentMapper.paymentDtos(paymentRepository.findAllPaymentByUserId(userId));
+    }
 }
