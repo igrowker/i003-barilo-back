@@ -29,4 +29,10 @@ public class PaymentController {
         return new ResponseEntity<>(paymentService.savePayment(paymentDto, headers), HttpStatus.CREATED);
     }
 
+    @Operation(summary = "allows user to view payment history", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/history")
+    public ResponseEntity<List<PaymentDto>> getPaymentByUserId(@RequestHeader HttpHeaders headers){
+        return new ResponseEntity<>(paymentService.getPaymentByUserId(headers), HttpStatus.OK);
+    }
+
 }

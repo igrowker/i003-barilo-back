@@ -9,4 +9,6 @@ public interface PaymentService {
 
     public PaymentDto savePayment(PaymentDto paymentDto, HttpHeaders headers);
 
+    public List<PaymentDto> getPaymentByUserId(HttpHeaders headers);
+
 }
