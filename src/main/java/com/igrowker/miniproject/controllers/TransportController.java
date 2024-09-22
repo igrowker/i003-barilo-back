@@ -40,17 +40,17 @@ public class TransportController {
 
         private final ITransportService transportService;
 
-        @Operation(summary = "Obtener todos los transportes filtrados")
+        @Operation(summary = "Get all filtered transports")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Transportes encontrados"),
-                        @ApiResponse(responseCode = "400", description = "Parámetros incorrectos"),
+                        @ApiResponse(responseCode = "200", description = "Transports found"),
+                        @ApiResponse(responseCode = "400", description = "Invalid parameters"),
         })
         @GetMapping
         public ResponseEntity<SuccessResponse<PagedModel<TransportDto>>> getAllTransports(
-                        @Parameter(description = "Nombre del transporte") @RequestParam(required = false) String name,
-                        @Parameter(description = "Precio del transporte") @RequestParam(required = false) String price,
-                        @Parameter(description = "ID del destino") @RequestParam(required = false) Long destinationId,
-                        @Parameter(description = "Nombre del destino") @RequestParam(required = false) String destinationName,
+                        @Parameter(description = "Destination ID") @RequestParam(required = false) Long destinationId,
+                        @Parameter(description = "Transport name") @RequestParam(required = false) String name,
+                        @Parameter(description = "Transport price") @RequestParam(required = false) String price,
+                        @Parameter(description = "Destination name") @RequestParam(required = false) String destinationName,
                         @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
 
                 BigDecimal priceValue = null;
@@ -69,20 +69,20 @@ public class TransportController {
 
         }
 
-        @Operation(summary = "Obtener un transporte por ID")
+        @Operation(summary = "Get a transport by ID")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Transporte encontrado"),
-                        @ApiResponse(responseCode = "404", description = "Transporte no encontrado"),
+                        @ApiResponse(responseCode = "200", description = "Transport found"),
+                        @ApiResponse(responseCode = "404", description = "Transport not found"),
         })
         @GetMapping("/{id}")
         public ResponseEntity<SuccessResponse<TransportDto>> getTransportById(@PathVariable Long id) {
                 return ResponseEntity.ok(new SuccessResponse<>(transportService.getTransportById(id), HttpStatus.OK));
         }
 
-        @Operation(summary = "Crear un nuevo transporte")
+        @Operation(summary = "Create a new transport")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "201", description = "Transporte creado correctamente"),
-                        @ApiResponse(responseCode = "400", description = "Parámetros incorrectos"),
+                        @ApiResponse(responseCode = "201", description = "Transport created successfully"),
+                        @ApiResponse(responseCode = "400", description = "Invalid parameters"),
         })
         @PostMapping
         public ResponseEntity<SuccessResponse<TransportDto>> createTransport(
@@ -92,11 +92,11 @@ public class TransportController {
                                                 HttpStatus.CREATED));
         }
 
-        @Operation(summary = "Actualizar un transporte por ID")
+        @Operation(summary = "Update a transport by ID")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Transporte actualizado correctamente"),
-                        @ApiResponse(responseCode = "404", description = "Transporte no encontrado"),
-                        @ApiResponse(responseCode = "400", description = "Parámetros incorrectos"),
+                        @ApiResponse(responseCode = "200", description = "Transport updated successfully"),
+                        @ApiResponse(responseCode = "404", description = "Transport not found"),
+                        @ApiResponse(responseCode = "400", description = "Invalid parameters"),
         })
         @PutMapping("/{id}")
         public ResponseEntity<SuccessResponse<TransportDto>> updateTransport(@PathVariable Long id,
@@ -106,10 +106,10 @@ public class TransportController {
                                                 HttpStatus.OK));
         }
 
-        @Operation(summary = "Eliminar un transporte por ID")
+        @Operation(summary = "Delete a transport by ID")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "204", description = "Transporte eliminado correctamente"),
-                        @ApiResponse(responseCode = "404", description = "Transporte no encontrado"),
+                        @ApiResponse(responseCode = "204", description = "Transport deleted successfully"),
+                        @ApiResponse(responseCode = "404", description = "Transport not found"),
         })
         @DeleteMapping("/{id}")
         public ResponseEntity<SuccessResponse<Void>> deleteTransport(@PathVariable Long id) {
