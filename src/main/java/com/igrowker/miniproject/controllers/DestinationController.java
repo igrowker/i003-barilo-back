@@ -1,8 +1,7 @@
 package com.igrowker.miniproject.controllers;
 
-import com.igrowker.miniproject.dtos.ActivityDTO;
+import com.igrowker.miniproject.dtos.ActivityDto;
 import com.igrowker.miniproject.services.interfaces.DestinationService;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/destinations")
-@Tag(name = "Destination", description = "Destination API")
+@Tag(name = "Destinations", description = "Destination API")
 public class DestinationController {
 
     private final DestinationService destinationService;
@@ -29,9 +28,9 @@ public class DestinationController {
         return ResponseEntity.ok("Test endpoint");
     }
 
-    @Operation(summary = "Get all activities by destinationName id")
+    @Operation(summary = "Get all activities by destination Id")
     @GetMapping("/{destinationId}/activities")
-    public ResponseEntity<List<ActivityDTO>> getActivities(@PathVariable Long destinationId) {
+    public ResponseEntity<List<ActivityDto>> getActivities(@PathVariable Long destinationId) {
         return ResponseEntity.ok(destinationService.getActivitiesByDestinationId(destinationId));
     }
 

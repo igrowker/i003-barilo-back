@@ -1,6 +1,6 @@
 package com.igrowker.miniproject.services.implementations;
 
-import com.igrowker.miniproject.dtos.ActivityDTO;
+import com.igrowker.miniproject.dtos.ActivityDto;
 import com.igrowker.miniproject.repositories.ActivityRepository;
 import com.igrowker.miniproject.services.interfaces.DestinationService;
 import org.modelmapper.ModelMapper;
@@ -21,9 +21,9 @@ public class DestinationServiceImpl implements DestinationService {
     }
 
     @Override
-    public List<ActivityDTO> getActivitiesByDestinationId(Long destinationId) {
+    public List<ActivityDto> getActivitiesByDestinationId(Long destinationId) {
         return activityRepository.findAllByDestinationId(destinationId)
-                .stream().map(activity -> modelMapper.map(activity, ActivityDTO.class))
+                .stream().map(activity -> modelMapper.map(activity, ActivityDto.class))
                 .collect(Collectors.toList());
     }
 }

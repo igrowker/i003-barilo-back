@@ -16,7 +16,7 @@ public class Group {
     private Long id;
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer studentsQuantity;
     @ManyToMany(mappedBy = "groups")
     private List<User> users;
