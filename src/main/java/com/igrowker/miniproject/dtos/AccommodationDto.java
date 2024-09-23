@@ -1,19 +1,17 @@
 package com.igrowker.miniproject.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import java.math.BigDecimal;
 
-@Getter
-@Setter
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransportFilterDto {
+public class AccommodationDto {
+    private Long id;
     private String name;
     private BigDecimal price;
-    private Long destinationId;
-    private String destinationName;
-
+    private String type;
 }

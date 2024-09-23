@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.igrowker.miniproject.dtos.TransportDto;
-import com.igrowker.miniproject.dtos.TransportFilterDto;
+import com.igrowker.miniproject.dtos.filters.TransportFilterDto;
 import com.igrowker.miniproject.dtos.req.CreateTransportDto;
 
 public interface TransportService {

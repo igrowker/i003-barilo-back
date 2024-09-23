@@ -7,21 +7,21 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.igrowker.miniproject.dtos.TransportDto;
-import com.igrowker.miniproject.dtos.TransportFilterDto;
+import com.igrowker.miniproject.dtos.filters.TransportFilterDto;
 import com.igrowker.miniproject.dtos.req.CreateTransportDto;
 import com.igrowker.miniproject.exceptions.NotFoundException;
 import com.igrowker.miniproject.models.Transport;
-import com.igrowker.miniproject.repositories.ITransportRepository;
-import com.igrowker.miniproject.services.interfaces.ITransportService;
+import com.igrowker.miniproject.repositories.TransportRepository;
+import com.igrowker.miniproject.services.interfaces.TransportService;
 import com.igrowker.miniproject.specifications.TransportSpecifications;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class TransportServiceImpl implements ITransportService {
+public class TransportServiceImpl implements TransportService {
 
-    private final ITransportRepository transportRepository;
+    private final TransportRepository transportRepository;
     private final ModelMapper modelMapper;
 
     @Override
