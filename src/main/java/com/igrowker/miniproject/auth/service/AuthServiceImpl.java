@@ -4,7 +4,6 @@ import com.igrowker.miniproject.auth.dto.JwtResponseDto;
 import com.igrowker.miniproject.auth.dto.LoginDto;
 import com.igrowker.miniproject.auth.dto.RegisterDto;
 import com.igrowker.miniproject.auth.jwt.JwtService;
-import com.igrowker.miniproject.dtos.UserDto;
 import com.igrowker.miniproject.exceptions.BadCredentialsException;
 import com.igrowker.miniproject.exceptions.ConflictException;
 import com.igrowker.miniproject.exceptions.NotFoundException;
@@ -20,9 +19,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class AuthServiceImpl implements AuthService{

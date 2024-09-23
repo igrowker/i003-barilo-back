@@ -6,35 +6,39 @@ import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.igrowker.miniproject.dtos.filters.TransportFilterDto;
+import com.igrowker.miniproject.dtos.filters.AccommodationFilterDto;
+import com.igrowker.miniproject.models.Accommodation;
 import com.igrowker.miniproject.models.Destination;
-import com.igrowker.miniproject.models.Transport;
 
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 
-public class TransportSpecifications {
-    private TransportSpecifications() {}
+public class AccommodationSpecifications {
 
-    public static Specification<Transport> withFilter(TransportFilterDto filter) {
+    private AccommodationSpecifications() {}
+
+    public static Specification<Accommodation> withFilter(AccommodationFilterDto filter) {
         return (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (filter.getName() != null && !filter.getName().isEmpty()) {
-                predicates.add(builder.equal(root.get("name"), filter.getName()));
+            if (filter.getName() != null) {
+                predicates.add(builder.like(root.get("name"), "%" + filter.getName() + "%"));
             }
 
             if (filter.getPrice() != null && filter.getPrice().compareTo(BigDecimal.ZERO) > 0) {
                 predicates.add(builder.equal(root.get("price"), filter.getPrice()));
             }
 
-            Join<Transport, Destination> destinationJoin = root.join("destination");
+            if (filter.getType() != null) {
+                predicates.add(builder.equal(root.get("type"), filter.getType()));
+            }
+
+            Join<Accommodation, Destination> destinationJoin = root.join("destination");
 
             if (filter.getDestinationId() != null) {
                 predicates.add(builder.equal(destinationJoin.get("id"), filter.getDestinationId()));
             }
-
-            if (filter.getDestinationName() != null && !filter.getDestinationName().isEmpty()) {
+            if (filter.getDestinationName() != null) {
                 predicates.add(builder.like(builder.lower(destinationJoin.get("name")),
                         "%" + filter.getDestinationName().toLowerCase() + "%"));
             }
