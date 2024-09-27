@@ -21,6 +21,8 @@ public class Accommodation {
     private BigDecimal price;
     @Column(nullable = false)
     private String type;
+    @Column(nullable = false)
+    private String description;
     @ManyToOne
     @JoinColumn(name = "destination_id", nullable = false)
     private Destination destination;
