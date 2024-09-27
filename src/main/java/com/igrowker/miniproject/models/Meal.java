@@ -22,4 +22,8 @@ public class Meal {
     @ManyToOne
     @JoinColumn(name = "destination_id", nullable = false)
     private Destination destination;
+    @Column(nullable = false)
+    private String description;
+    @Column(nullable = false)
+    private String type; 
 }

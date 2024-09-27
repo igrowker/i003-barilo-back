@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+import com.igrowker.miniproject.utils.TransportCategory;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,4 +24,9 @@ public class Transport {
     @ManyToOne
     @JoinColumn(name = "destination_id", nullable = false)
     private Destination destination;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TransportCategory transportCategory;
+    @Column(nullable = false)
+    private String companyName;
 }

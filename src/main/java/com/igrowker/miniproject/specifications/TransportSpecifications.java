@@ -28,6 +28,10 @@ public class TransportSpecifications {
                 predicates.add(builder.equal(root.get("price"), filter.getPrice()));
             }
 
+            if (filter.getTransportCategory() != null) {
+                predicates.add(builder.equal(root.get("transportCategory"), filter.getTransportCategory()));
+            }
+
             Join<Transport, Destination> destinationJoin = root.join("destination");
 
             if (filter.getDestinationId() != null) {
