@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,4 +15,8 @@ public class DestinationDto {
     private Long id;
     private String name;
     private String city;
+    private List<AccommodationDto> accommodations;
+    private List<ActivityDTO> activities;
+    private List<TransportDto> transports;
+    private List<MealDto> meals;
 }

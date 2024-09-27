@@ -6,6 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import com.igrowker.miniproject.models.Transport;
 
+import java.util.List;
+
 @Repository
 public interface TransportRepository extends JpaRepository<Transport, Long>, JpaSpecificationExecutor<Transport> {
+
+    public List<Transport> findAllByDestinationId(Long destinationId);
 }
