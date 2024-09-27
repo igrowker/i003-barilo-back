@@ -16,7 +16,7 @@ public class DestinationDto {
     private String name;
     private String city;
     private List<AccommodationDto> accommodations;
-    private List<ActivityDTO> activities;
+    private List<ActivityDto> activities;
     private List<TransportDto> transports;
     private List<MealDto> meals;
 }

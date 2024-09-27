@@ -3,8 +3,6 @@ package com.igrowker.miniproject.mappers;
 import com.igrowker.miniproject.dtos.TravelDto;
 import com.igrowker.miniproject.models.Travel;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
