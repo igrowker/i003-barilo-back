@@ -11,5 +11,6 @@ public class ActivityDTO {
     Long id;
     String name;
     String price;
+    String description; 
     String destinationName;
 }
