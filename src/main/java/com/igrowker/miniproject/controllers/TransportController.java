@@ -23,6 +23,7 @@ import com.igrowker.miniproject.dtos.filters.TransportFilterDto;
 import com.igrowker.miniproject.dtos.req.CreateTransportDto;
 import com.igrowker.miniproject.services.interfaces.TransportService;
 import com.igrowker.miniproject.utils.BigDecimalValidator;
+import com.igrowker.miniproject.utils.TransportCategory;
 import com.igrowker.miniproject.utils.Response.SuccessResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,11 +52,13 @@ public class TransportController {
                         @Parameter(description = "Transport name") @RequestParam(required = false) String name,
                         @Parameter(description = "Transport price") @RequestParam(required = false) String price,
                         @Parameter(description = "Destination name") @RequestParam(required = false) String destinationName,
+                        @Parameter(description = "Transport type" ) @RequestParam(required = false) TransportCategory transportCategory,
                         @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
 
-                TransportFilterDto transportFilterDto = new TransportFilterDto(name,
-                                bigDecimalValidator.validateAndParse(price, "price"), destinationId,
-                                destinationName);
+                TransportFilterDto transportFilterDto = new TransportFilterDto(
+                                name, bigDecimalValidator.validateAndParse(price, "price"),
+                                destinationId, destinationName, transportCategory);
+
                 Page<TransportDto> transports = transportService.getAllTransports(transportFilterDto, pageable);
                 PagedModel<TransportDto> pagedModel = new PagedModel<>(transports);
                 return ResponseEntity.ok(new SuccessResponse<>(pagedModel, HttpStatus.OK));

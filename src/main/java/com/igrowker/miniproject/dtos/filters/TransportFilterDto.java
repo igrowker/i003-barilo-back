@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.math.BigDecimal;
+
+import com.igrowker.miniproject.utils.TransportCategory;
 
 @Getter
 @Setter
@@ -15,5 +18,5 @@ public class TransportFilterDto {
     private BigDecimal price;
     private Long destinationId;
     private String destinationName;
-
+    private TransportCategory transportCategory;
 }

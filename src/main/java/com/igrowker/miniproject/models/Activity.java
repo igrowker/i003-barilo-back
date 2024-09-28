@@ -22,6 +22,8 @@ public class Activity {
     private String name;
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
+    @Column(nullable = false)
+    private String description;
     @ManyToOne
     @JoinColumn(name = "destination_id", nullable = false)
     private Destination destination;

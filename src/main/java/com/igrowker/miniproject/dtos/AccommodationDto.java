@@ -13,5 +13,6 @@ public class AccommodationDto {
     private Long id;
     private String name;
     private BigDecimal price;
+    private String description;
     private String type;
 }
