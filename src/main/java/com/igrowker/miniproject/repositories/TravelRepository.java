@@ -24,6 +24,4 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
             "LEFT JOIN g.users u " +            // Join con los usuarios del grupo
             "WHERE u.id = :userId")
     List<Travel> findByUserId(@Param("userId") Long userId);
-
-
 }

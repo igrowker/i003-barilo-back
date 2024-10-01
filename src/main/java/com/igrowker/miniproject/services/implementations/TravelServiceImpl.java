@@ -5,7 +5,10 @@ import com.igrowker.miniproject.dtos.*;
 import com.igrowker.miniproject.exceptions.NotFoundException;
 import com.igrowker.miniproject.mappers.TravelMapper;
 import com.igrowker.miniproject.models.*;
+import com.igrowker.miniproject.models.enums.LogType;
+import com.igrowker.miniproject.models.enums.TravelEntity;
 import com.igrowker.miniproject.repositories.*;
+import com.igrowker.miniproject.services.interfaces.TravelLogService;
 import com.igrowker.miniproject.services.interfaces.TravelService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -28,11 +31,12 @@ public class TravelServiceImpl implements TravelService {
     private final MealRepository mealRepository;
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
+    private final TravelLogService travelLogService;
 
     public TravelServiceImpl(TravelRepository travelRepository, TravelMapper travelMapper, AuthService authService,
                              DestinationRepository destinationRepository, ActivityRepository activityRepository,
                              AccommodationRepository accommodationRepository, TransportRepository transportRepository,
-                             MealRepository mealRepository, UserRepository userRepository, GroupRepository groupRepository){
+                             MealRepository mealRepository, UserRepository userRepository, GroupRepository groupRepository, TravelLogService travelLogService){
         this.travelRepository = travelRepository;
         this.travelMapper = travelMapper;
         this.authService = authService;
@@ -43,6 +47,7 @@ public class TravelServiceImpl implements TravelService {
         this.mealRepository = mealRepository;
         this.userRepository = userRepository;
         this.groupRepository = groupRepository;
+        this.travelLogService = travelLogService;
     }
 
     private BigDecimal calculateCosts(TravelDto travelDto, Group group) {
@@ -114,6 +119,11 @@ public class TravelServiceImpl implements TravelService {
         travelDto.setCostPerStudent(costPerStudent);
 
         Travel travel = travelMapper.toTravel(travelDto); // Mappear el DTO a la entidad
+
+        Travel savedTravel = travelRepository.save(travel); // Guardar el viaje
+        
+        travelLogService.registerTravelLog(LogType.NEW, TravelEntity.TRAVEL, "Se creo un nuevo viaje", savedTravel.getId()); // Registrar el log del viaje
+
         return travelMapper.toTravelDto(travelRepository.save(travel)); // Guardar el viaje
     }
 
