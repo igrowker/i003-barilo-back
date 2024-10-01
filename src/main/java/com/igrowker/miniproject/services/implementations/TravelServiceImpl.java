@@ -171,6 +171,8 @@ public class TravelServiceImpl implements TravelService {
         travel.setStartDate(travelDto.getStartDate());
         travel.setEndDate(travelDto.getEndDate());
 
+        travel.setOrigin(travelDto.getOrigin());
+
         // Actualizar el destino si ha cambiado el destinationId
         if (!travel.getDestination().getId().equals(travelDto.getDestinationId())) {
             Destination newDestination = destinationRepository.findById(travelDto.getDestinationId())

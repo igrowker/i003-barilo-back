@@ -16,6 +16,7 @@ import java.util.List;
 public class TravelDto {
     private Long id;
     private Long destinationId;
+    private String origin;
     private BigDecimal totalPrice;
     private BigDecimal costPerStudent;
     private LocalDateTime startDate;
