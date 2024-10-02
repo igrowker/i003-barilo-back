@@ -25,5 +25,4 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
             "WHERE u.id = :userId")
     List<Travel> findByUserId(@Param("userId") Long userId);
 
-
 }
