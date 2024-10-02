@@ -17,6 +17,7 @@ public class Travel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String origin;
     @ManyToOne
     @JoinColumn(name = "destination_id", nullable = false)
     private Destination destination;
