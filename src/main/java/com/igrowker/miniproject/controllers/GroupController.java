@@ -1,6 +1,7 @@
 package com.igrowker.miniproject.controllers;
 
 import com.igrowker.miniproject.dtos.GroupDto;
+import com.igrowker.miniproject.dtos.req.GetGroupById;
 import com.igrowker.miniproject.services.interfaces.GroupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,15 +47,21 @@ public class GroupController {
         return ResponseEntity.ok(groupService.updateGroup(groupId, groupDto));
     }
 
-    @Operation(summary = "Add users to a group")
-    @PostMapping("/{groupId}/users")
-    public ResponseEntity<GroupDto> addUsersToGroup(@PathVariable Long groupId, @RequestBody List<Long> userIds) {
-        return ResponseEntity.ok(groupService.addUsersToGroup(groupId, userIds));
+    @Operation(summary = "Add the logged user to a group")
+    @PostMapping("/{groupId}/add-user")
+    public ResponseEntity<GroupDto> addUserToGroup(@PathVariable Long groupId) {
+        return ResponseEntity.ok(groupService.addUserToGroup(groupId));
     }
 
     @Operation(summary = "Remove users from a group")
     @DeleteMapping("/{groupId}/users")
     public ResponseEntity<GroupDto> removeUsersFromGroup(@PathVariable Long groupId, @RequestBody List<Long> userIds) {
         return ResponseEntity.ok(groupService.removeUsersFromGroup(groupId, userIds));
+    }
+
+    @Operation(summary = "Get group by id")
+    @GetMapping("/{groupId}")
+    public ResponseEntity<GetGroupById> getGroupById(@PathVariable Long groupId) {
+        return ResponseEntity.ok(groupService.getGroupById(groupId));
     }
 }
