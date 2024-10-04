@@ -3,7 +3,6 @@ FROM maven:3.8.3-openjdk-17 AS builder
 
 # Establecer el directorio de trabajo en /app
 WORKDIR /app
-
 # Copiar solo los archivos necesarios del directorio actual al directorio /src dentro del contenedor
 COPY pom.xml .
 COPY src ./src
