@@ -6,6 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import com.igrowker.miniproject.models.Accommodation;
 
+import java.util.List;
+
 @Repository
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long>, JpaSpecificationExecutor<Accommodation> {
+
+    public List<Accommodation> findAllByDestinationId(Long destinationId);
 }
