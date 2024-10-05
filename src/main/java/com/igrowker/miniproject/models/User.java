@@ -1,7 +1,11 @@
 package com.igrowker.miniproject.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,10 +33,13 @@ public class User {
     private Role role;
     @ManyToMany
     @JoinTable(
-      name = "user_group",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "group_id"))
+            name = "user_group",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id"))
     private List<Group> groups;
     @OneToMany(mappedBy = "user")
     private List<Crowdfunding> crowdfundings;
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<Image> images;
 }
