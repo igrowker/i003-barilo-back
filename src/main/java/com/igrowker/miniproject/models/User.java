@@ -1,6 +1,5 @@
 package com.igrowker.miniproject.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,7 +38,5 @@ public class User {
     private List<Group> groups;
     @OneToMany(mappedBy = "user")
     private List<Crowdfunding> crowdfundings;
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference
-    private List<Image> images;
+
 }

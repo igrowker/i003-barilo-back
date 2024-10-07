@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -22,8 +24,7 @@ public class Image {
     private String weight;
     @Column
     private String height;
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @OneToMany(mappedBy = "image")
     @JsonBackReference
-    private User user;
+    private List<ImageEntityLink> imageEntityLinks;
 }

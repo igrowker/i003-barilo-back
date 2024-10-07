@@ -20,6 +20,7 @@ public class Destination {
     private String name;
     @Column(nullable = false)
     private String city;
+    @Column(columnDefinition = "text")
     private String description;
     @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore // Ignorar para que no se serialice al consultar un viaje

@@ -7,6 +7,7 @@ import com.igrowker.miniproject.exceptions.BadRequestException;
 import com.igrowker.miniproject.exceptions.NotFoundException;
 import com.igrowker.miniproject.models.Image;
 import com.igrowker.miniproject.models.User;
+import com.igrowker.miniproject.models.enums.TypeClass;
 import com.igrowker.miniproject.repositories.UserRepository;
 import com.igrowker.miniproject.services.interfaces.ImageService;
 import com.igrowker.miniproject.services.interfaces.UserService;
@@ -64,6 +65,6 @@ public class UserServiceImpl implements UserService {
     public Optional<Image> uploadImage(MultipartFile multipartFile, Long id) throws IOException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
-        return imageService.upload(multipartFile, user);
+        return imageService.upload(multipartFile, user.getId(), TypeClass.USER);
     }
 }
