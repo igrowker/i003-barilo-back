@@ -12,6 +12,6 @@ public interface GroupService {
     Page<GroupDto> getGroups(Pageable pageable, String name);
     GroupDto updateGroup(Long groupId,GroupDto groupDto);
     GroupDto addUserToGroup(Long groupId);
-    GroupDto removeUsersFromGroup(Long groupId,List<Long> userIds);
+    GroupDto removeUserFromGroup(Long groupId);
     GetGroupById getGroupById(Long groupId);
 }

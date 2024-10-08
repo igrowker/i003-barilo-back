@@ -39,6 +39,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Page<GroupDto> getGroups(Pageable pageable, String name) {
+        if (name == null || name.isEmpty()) {
+            return groupRepository.findAll(pageable).map(group -> modelMapper.map(group, GroupDto.class));
+        }
         return groupRepository.findAllByNameContaining(name, pageable).map(group -> modelMapper.map(group, GroupDto.class));
     }
 
@@ -72,26 +75,36 @@ public class GroupServiceImpl implements GroupService {
         }
 
         group.getUsers().add(user);
+        group.setStudentsQuantity(group.getStudentsQuantity() + 1);
+        user.getGroups().add(group); // Agrega el grupo al usuario
 
         Group updatedGroup = groupRepository.save(group);
+        userRepository.save(user); // Guarda el usuario con el grupo actualizado
+
         return modelMapper.map(updatedGroup, GroupDto.class);
     }
 
     @Override
-    public GroupDto removeUsersFromGroup(Long groupId, List<Long> userIds) {
+    public GroupDto removeUserFromGroup(Long groupId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new NotFoundException("Grupo con id " + groupId + " no encontrado"));
 
-        List<User> users = group.getUsers();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new NotFoundException("Usuario con email "+  username + "no encontrado"));
 
-        for (Long userId : userIds) {
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new NotFoundException("Usuario con id " + userId + " no encontrado"));
-            users.remove(user);
+        List<User> groupUsers = group.getUsers();
+        if (!groupUsers.contains(user)) {
+            throw new IllegalArgumentException("El usuario no pertenece al grupo");
         }
 
-        group.setUsers(users);
+        group.getUsers().remove(user);
+        group.setStudentsQuantity(group.getStudentsQuantity() - 1);
+        user.getGroups().remove(group); // Elimina el grupo del usuario
+
         Group updatedGroup = groupRepository.save(group);
+        userRepository.save(user); // Guarda el usuario con el grupo actualizado
 
         return modelMapper.map(updatedGroup, GroupDto.class);
     }

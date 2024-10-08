@@ -53,10 +53,10 @@ public class GroupController {
         return ResponseEntity.ok(groupService.addUserToGroup(groupId));
     }
 
-    @Operation(summary = "Remove users from a group")
-    @DeleteMapping("/{groupId}/users")
-    public ResponseEntity<GroupDto> removeUsersFromGroup(@PathVariable Long groupId, @RequestBody List<Long> userIds) {
-        return ResponseEntity.ok(groupService.removeUsersFromGroup(groupId, userIds));
+    @Operation(summary = "Remove the logged user from a group")
+    @DeleteMapping("/{groupId}/remove-user")
+    public ResponseEntity<GroupDto> removeUserFromGroup(@PathVariable Long groupId) {
+        return ResponseEntity.ok(groupService.removeUserFromGroup(groupId));
     }
 
     @Operation(summary = "Get group by id")
