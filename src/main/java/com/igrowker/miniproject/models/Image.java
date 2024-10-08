@@ -24,7 +24,4 @@ public class Image {
     private String weight;
     @Column
     private String height;
-    @OneToMany(mappedBy = "image")
-    @JsonBackReference
-    private List<ImageEntityLink> imageEntityLinks;
 }

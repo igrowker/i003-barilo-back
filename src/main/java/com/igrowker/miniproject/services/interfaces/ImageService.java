@@ -2,6 +2,7 @@ package com.igrowker.miniproject.services.interfaces;
 
 import com.igrowker.miniproject.models.Image;
 import com.igrowker.miniproject.models.enums.TypeClass;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public interface ImageService {
 
-    List<Image> findByEntity(Long id, TypeClass entityType);
+    List<Image> findByEntityIdAndEntityType(Long id, TypeClass entityType);
 
     List<Image> findByUser(Long id);
 
@@ -21,5 +22,6 @@ public interface ImageService {
 
     Optional<Image> upload(MultipartFile multipartFile, Long id, TypeClass entityType) throws IOException;
 
+    @Transactional
     Map delete(String publicId) throws IOException;
 }

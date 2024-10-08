@@ -25,11 +25,15 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String password;
+    @Column(nullable = false, columnDefinition = "varchar(13)")
+    private String phone;
     @Column(precision = 10, scale = 2)
     private BigDecimal pendingBalance;
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+    @Column
+    private String imageId;
     @ManyToMany
     @JoinTable(
             name = "user_group",
@@ -38,5 +42,4 @@ public class User {
     private List<Group> groups;
     @OneToMany(mappedBy = "user")
     private List<Crowdfunding> crowdfundings;
-
 }

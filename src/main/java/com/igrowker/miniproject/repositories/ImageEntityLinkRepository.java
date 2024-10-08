@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface ImageEntityLinkRepository extends JpaRepository<ImageEntityLink, Long> {
     List<ImageEntityLink> findByEntityTypeAndEntityId(TypeClass entityType, Long entityId);
+
+    void deleteByImagePublicId(String publicId);
 }

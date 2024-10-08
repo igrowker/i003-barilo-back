@@ -3,6 +3,7 @@ package com.igrowker.miniproject.services.implementations;
 import com.igrowker.miniproject.auth.service.AuthService;
 import com.igrowker.miniproject.dtos.PasswordDto;
 import com.igrowker.miniproject.dtos.UserDto;
+import com.igrowker.miniproject.dtos.req.UpdateUserDto;
 import com.igrowker.miniproject.exceptions.BadRequestException;
 import com.igrowker.miniproject.exceptions.NotFoundException;
 import com.igrowker.miniproject.models.Image;
@@ -43,9 +44,15 @@ public class UserServiceImpl implements UserService {
         Long userId = authService.getIdByLoguedUser(headers);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado!"));
-        modelMapper.typeMap(User.class, UserDto.class)
-                .addMapping(role -> role.getRole().getName(), UserDto::setRole);
-        return modelMapper.map(user, UserDto.class);
+
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        userDto.setRole(user.getRole().getName());
+
+        if (user.getImageId() != null) {
+            Image image = imageService.findByPublicId(user.getImageId()).orElse(null);
+            userDto.setImage(image);
+        }
+        return userDto;
     }
 
     @Override
@@ -62,9 +69,92 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto updateProfile(Long id, UpdateUserDto userDto, MultipartFile image) throws IOException {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+        if (image != null) {
+            uploadImage(user, image);
+        } else {
+            updateImageUrl(user, userDto);
+        }
+
+        updateUserProfile(user, userDto);
+
+        userRepository.save(user);
+
+        UserDto newUserDto = modelMapper.map(user, UserDto.class);
+        newUserDto.setRole(user.getRole().getName());
+
+        if (user.getImageId() != null) {
+            Image newImage = imageService.findByPublicId(user.getImageId()).orElse(null);
+            newUserDto.setImage(newImage);
+        }
+
+        return newUserDto;
+    }
+
+    private void uploadImage(User user, MultipartFile image) throws IOException {
+        Optional<Image> uploadedImage = imageService.upload(image, user.getId(), TypeClass.USER);
+        // verifico si la imagen es diferente a la de la imagen actual basdo en publicId
+        if (user.getImageId() != null && uploadedImage.isPresent() && !uploadedImage.get().getPublicId().equals(user.getImageId())) {
+            Optional<Image> preImage = imageService.findByPublicId(user.getImageId());
+            preImage.ifPresent(image1 -> {
+                try {
+                    imageService.delete(image1.getPublicId());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+        user.setImageId(uploadedImage.orElseThrow(() -> new NotFoundException("Imagen no encontrada")).getPublicId());
+    }
+
+    private void updateImageUrl(User user, UpdateUserDto userDto) throws IOException {
+        if (userDto == null || !hasValue(userDto.getImageUrl())) {
+            return;
+        }
+        Image uploadedImage = Image.builder()
+                .url(userDto.getImageUrl())
+                .build();
+        Optional<Image> newImage = imageService.save(uploadedImage, user.getId(), TypeClass.USER);
+        if (user.getImageId() != null && newImage.isPresent() && !newImage.get().getPublicId().equals(user.getImageId())) {
+            Optional<Image> preImage = imageService.findByPublicId(user.getImageId());
+            preImage.ifPresent(image1 -> {
+                try {
+                    imageService.delete(image1.getPublicId());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+        user.setImageId(newImage.orElseThrow(() -> new NotFoundException("Imagen no encontrada")).getPublicId());
+    }
+
+    private void updateUserProfile(User user, UpdateUserDto userDto) {
+        if (userDto != null) {
+            if (hasValue(userDto.getName())) {
+                user.setName(userDto.getName());
+            }
+            if (hasValue(userDto.getEmail())) {
+                user.setEmail(userDto.getEmail());
+            }
+            if (hasValue(userDto.getPhone())) {
+                user.setPhone(userDto.getPhone());
+            }
+        }
+    }
+
+    private boolean hasValue(String value) {
+        return value != null && !value.isEmpty() && !value.isBlank();
+    }
+
+    @Override
     public Optional<Image> uploadImage(MultipartFile multipartFile, Long id) throws IOException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
-        return imageService.upload(multipartFile, user.getId(), TypeClass.USER);
+        Optional<Image> image = imageService.upload(multipartFile, user.getId(), TypeClass.USER);
+        user.setImageId(image.orElseThrow(() -> new NotFoundException("Imagen no encontrada")).getPublicId());
+        userRepository.save(user);
+        return image;
     }
 }

@@ -11,8 +11,8 @@ public class ImageMapper {
 
     public static Image toImage(Map<?, ?> map) {
         return Image.builder()
-                .publicId((String) map.get("public_id"))
-                .url((String) map.get("url"))
+                .publicId(map.get("public_id").toString())
+                .url(map.get("url").toString())
                 .weight(map.get("width").toString())
                 .height(map.get("height").toString())
                 .build();
