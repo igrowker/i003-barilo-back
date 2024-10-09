@@ -64,4 +64,31 @@ public class GroupController {
     public ResponseEntity<GetGroupById> getGroupById(@PathVariable Long groupId) {
         return ResponseEntity.ok(groupService.getGroupById(groupId));
     }
+
+    @GetMapping("{groupId}/crowdfundings")
+    public ResponseEntity<List<GetGroupById>> getGroupCrowdfundings(@PathVariable Long groupId) {
+        return ResponseEntity.ok(groupService.getGroupCrowdfundings(groupId));
+    }
+
+    @GetMapping("{groupId}/crowdfundings/{crowdfundingId}/donations")
+    public ResponseEntity<List<GetGroupById>> getGroupCrowdfundingsDonations(@PathVariable Long groupId, @PathVariable Long crowdfundingId) {
+        return ResponseEntity.ok(groupService.getGroupCrowdfundingsDonations(groupId, crowdfundingId));
+    }
+
+    @PostMapping("{groupId}/crowdfundings/{crowdfundingId}/donate")
+    public ResponseEntity<GroupDto> donateToCrowdfunding(@PathVariable Long groupId, @PathVariable Long crowdfundingId) {
+        return ResponseEntity.ok(groupService.donateToCrowdfunding(groupId, crowdfundingId));
+    }
+
+    @PostMapping("{groupId}/crowdfundings/{crowdfundingId}/cancel")
+    public ResponseEntity<GroupDto> cancelCrowdfunding(@PathVariable Long groupId, @PathVariable Long crowdfundingId) {
+        return ResponseEntity.ok(groupService.cancelCrowdfunding(groupId, crowdfundingId));
+    }
+
+    @PutMapping("{groupId}/crowdfundings/{crowdfundingId}")
+    public ResponseEntity<GroupDto> updateCrowdfunding(@PathVariable Long groupId, @PathVariable Long crowdfundingId, @RequestBody GroupDto groupDto) {
+        return ResponseEntity.ok(groupService.updateCrowdfunding(groupId, crowdfundingId, groupDto));
+    }
+
+
 }
