@@ -1,6 +1,7 @@
 package com.igrowker.miniproject.services.implementations;
 
 import com.igrowker.miniproject.dtos.GroupDto;
+import com.igrowker.miniproject.dtos.req.GetGroupById;
 import com.igrowker.miniproject.exceptions.NotFoundException;
 import com.igrowker.miniproject.models.Group;
 import com.igrowker.miniproject.models.User;
@@ -11,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +39,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Page<GroupDto> getGroups(Pageable pageable, String name) {
+        if (name == null || name.isEmpty()) {
+            return groupRepository.findAll(pageable).map(group -> modelMapper.map(group, GroupDto.class));
+        }
         return groupRepository.findAllByNameContaining(name, pageable).map(group -> modelMapper.map(group, GroupDto.class));
     }
 
@@ -54,40 +60,66 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public GroupDto addUsersToGroup(Long groupId, List<Long> userIds) {
+    public GroupDto addUserToGroup(Long groupId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new NotFoundException("Grupo con id" + groupId + " no encontrado"));
 
-        List<User> users = group.getUsers();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new NotFoundException("Usuario con email "+  username + "no encontrado" + ". No es posible registrar la actividad realizada"));
 
-        for (Long userId : userIds) {
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new NotFoundException("Usuario con id" + userId + " no encontrado"));
-            users.add(user);
+        List<User> groupUsers = group.getUsers();
+        if (groupUsers.contains(user)) {
+            throw new IllegalArgumentException("El usuario ya pertenece al grupo");
         }
 
-        group.setUsers(users);
+        group.getUsers().add(user);
+        user.getGroups().add(group); // Agrega el grupo al usuario
+
         Group updatedGroup = groupRepository.save(group);
+        userRepository.save(user); // Guarda el usuario con el grupo actualizado
 
         return modelMapper.map(updatedGroup, GroupDto.class);
     }
 
     @Override
-    public GroupDto removeUsersFromGroup(Long groupId, List<Long> userIds) {
+    public GroupDto removeUserFromGroup(Long groupId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new NotFoundException("Grupo con id " + groupId + " no encontrado"));
 
-        List<User> users = group.getUsers();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new NotFoundException("Usuario con email "+  username + "no encontrado"));
 
-        for (Long userId : userIds) {
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new NotFoundException("Usuario con id " + userId + " no encontrado"));
-            users.remove(user);
+        List<User> groupUsers = group.getUsers();
+        if (!groupUsers.contains(user)) {
+            throw new IllegalArgumentException("El usuario no pertenece al grupo");
         }
 
-        group.setUsers(users);
+        group.getUsers().remove(user);
+        user.getGroups().remove(group); // Elimina el grupo del usuario
+
         Group updatedGroup = groupRepository.save(group);
+        userRepository.save(user); // Guarda el usuario con el grupo actualizado
 
         return modelMapper.map(updatedGroup, GroupDto.class);
+    }
+
+    @Override
+    public GetGroupById getGroupById(Long groupId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new NotFoundException("Usuario con email "+  username + "no encontrado"));
+
+        return groupRepository.findById(groupId)
+                .map(group -> {
+                    GetGroupById groupDto = modelMapper.map(group, GetGroupById.class);
+                    groupDto.setIsMember(group.getUsers().contains(user));
+                    return groupDto;
+                })
+                .orElseThrow(() -> new NotFoundException("Grupo con id " + groupId + " no encontrado"));
     }
 }
