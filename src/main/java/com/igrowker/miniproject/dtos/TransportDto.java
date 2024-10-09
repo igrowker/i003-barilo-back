@@ -2,6 +2,7 @@ package com.igrowker.miniproject.dtos;
 
 import java.math.BigDecimal;
 
+import com.igrowker.miniproject.models.Image;
 import com.igrowker.miniproject.utils.TransportCategory;
 
 import lombok.AllArgsConstructor;
@@ -20,4 +21,5 @@ public class TransportDto {
     private BigDecimal price;
     private TransportCategory transportCategory;
     private TransportDestinationDto destination;
+    private Image image;
 }

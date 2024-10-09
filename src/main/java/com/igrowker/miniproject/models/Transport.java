@@ -29,4 +29,6 @@ public class Transport {
     private TransportCategory transportCategory;
     @Column(nullable = false)
     private String companyName;
+    @Column
+    private String imageId;
 }

@@ -1,5 +1,6 @@
 package com.igrowker.miniproject.dtos;
 
+import com.igrowker.miniproject.models.Image;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +17,5 @@ public class MealDto {
     private String name;
     private BigDecimal price;
     private String destinationName;
+    private Image image;
 }
