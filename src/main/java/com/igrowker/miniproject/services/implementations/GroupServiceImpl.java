@@ -75,7 +75,6 @@ public class GroupServiceImpl implements GroupService {
         }
 
         group.getUsers().add(user);
-        group.setStudentsQuantity(group.getStudentsQuantity() + 1);
         user.getGroups().add(group); // Agrega el grupo al usuario
 
         Group updatedGroup = groupRepository.save(group);
@@ -100,7 +99,6 @@ public class GroupServiceImpl implements GroupService {
         }
 
         group.getUsers().remove(user);
-        group.setStudentsQuantity(group.getStudentsQuantity() - 1);
         user.getGroups().remove(group); // Elimina el grupo del usuario
 
         Group updatedGroup = groupRepository.save(group);
