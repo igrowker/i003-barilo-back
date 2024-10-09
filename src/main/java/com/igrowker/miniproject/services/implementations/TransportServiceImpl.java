@@ -48,8 +48,13 @@ public class TransportServiceImpl implements TransportService {
     public TransportDto createTransport(CreateTransportDto transportDto) {
         Transport transport = modelMapper.map(transportDto, Transport.class);
         Image image = Image.builder().url(transportDto.getImageUrl()).build();
-        imageService.save(image, transport.getId(), TypeClass.TRANSPORT).map(Image::getPublicId).ifPresent(transport::setImageId);
         Transport savedTransport = transportRepository.save(transport);
+
+        imageService.save(image, savedTransport.getId(), TypeClass.TRANSPORT).map(Image::getPublicId).ifPresent(publicId -> {
+            savedTransport.setImageId(publicId);
+            transportRepository.save(savedTransport);
+        });
+        
         return modelMapper.map(savedTransport, TransportDto.class);
     }
 
