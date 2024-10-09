@@ -33,4 +33,12 @@ public class UserController {
         userService.updatePassword(headers, passwordDto);
         return new ResponseEntity<>("Password actualizada!", HttpStatus.OK);
     }
+
+    @Operation(summary = "Check if the authenticated user belongs to any group")
+    @GetMapping("/group-membership")
+    public ResponseEntity<Boolean> checkUserGroupMembership() {
+        boolean belongsToGroup = userService.userBelongsToAnyGroup();
+        return new ResponseEntity<>(belongsToGroup, HttpStatus.OK);
+    }
+
 }
