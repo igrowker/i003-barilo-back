@@ -14,6 +14,8 @@ import com.igrowker.miniproject.services.interfaces.ImageService;
 import com.igrowker.miniproject.services.interfaces.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,7 +67,6 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
         } else
             throw new BadRequestException("La contraseña no coincide!");
-
     }
 
     @Override
@@ -157,4 +158,13 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return image;
     }
+
+    public boolean userBelongsToAnyGroup() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new NotFoundException("Usuario con email "+  username + "no encontrado"));
+        return !user.getGroups().isEmpty();
+    }
+
 }

@@ -19,4 +19,7 @@ public interface UserService {
     public UserDto updateProfile(Long id, UpdateUserDto userDto, MultipartFile image) throws IOException;
 
     Optional<Image> uploadImage(MultipartFile multipartFile, Long id) throws IOException;
+
+    public boolean userBelongsToAnyGroup();
+
 }

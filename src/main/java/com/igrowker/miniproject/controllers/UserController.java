@@ -60,4 +60,12 @@ public class UserController {
     public ResponseEntity<?> uploadImage(@RequestPart("image") MultipartFile multipartFile, @PathVariable Long id) throws IOException {
         return new ResponseEntity<>(userService.uploadImage(multipartFile, id), HttpStatus.CREATED);
     }
+
+    @Operation(summary = "Check if the authenticated user belongs to any group")
+    @GetMapping("/group-membership")
+    public ResponseEntity<Boolean> checkUserGroupMembership() {
+        boolean belongsToGroup = userService.userBelongsToAnyGroup();
+        return new ResponseEntity<>(belongsToGroup, HttpStatus.OK);
+    }
+
 }
