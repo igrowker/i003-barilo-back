@@ -1,5 +1,6 @@
 package com.igrowker.miniproject.dtos;
 
+import com.igrowker.miniproject.models.Image;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

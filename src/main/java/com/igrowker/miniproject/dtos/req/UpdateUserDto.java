@@ -9,6 +9,6 @@ public class UpdateUserDto {
     private String name;
     private String email;
     private String phone;
-    @Schema(example = "https://example.com/image.jpg")
+    @Schema(description = "Image url, the imageUrl is not priority over image", example = "https://example.com/image.jpg")
     private String imageUrl;
 }

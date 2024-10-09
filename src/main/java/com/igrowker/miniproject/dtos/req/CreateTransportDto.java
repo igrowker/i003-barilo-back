@@ -17,4 +17,5 @@ public class CreateTransportDto {
     private Long destinationId;
     @Schema(description = "Destination name", example = "BASIC or STANDARD or PREMIUM")
     private TransportCategory transportCategory;
+    private String imageUrl;
 }

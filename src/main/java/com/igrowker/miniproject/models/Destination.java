@@ -22,6 +22,8 @@ public class Destination {
     private String city;
     @Column(columnDefinition = "text")
     private String description;
+    @Column
+    private String imageId;
     @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore // Ignorar para que no se serialice al consultar un viaje
     private List<Accommodation> accommodations; //puse esto para que cada destinationName pueda acceder a los alojamientos

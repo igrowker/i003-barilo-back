@@ -1,5 +1,6 @@
 package com.igrowker.miniproject.dtos;
 
+import com.igrowker.miniproject.models.Image;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,4 +16,5 @@ public class ActivityDto {
     String description;
     BigDecimal price;
     String destinationName;
+    Image image;
 }
