@@ -9,4 +9,6 @@ public interface UserService {
     public UserDto getProfile(HttpHeaders headers);
 
     public void updatePassword(HttpHeaders headers, PasswordDto passwordDto);
+
+    public boolean userBelongsToAnyGroup();
 }
