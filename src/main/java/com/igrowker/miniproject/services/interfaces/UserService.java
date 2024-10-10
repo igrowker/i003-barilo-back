@@ -6,9 +6,9 @@ import com.igrowker.miniproject.dtos.req.UpdateUserDto;
 import com.igrowker.miniproject.models.Image;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.Optional;
+import org.springframework.http.HttpHeaders;
 
 public interface UserService {
 
@@ -21,5 +21,6 @@ public interface UserService {
     Optional<Image> uploadImage(MultipartFile multipartFile, Long id) throws IOException;
 
     public boolean userBelongsToAnyGroup();
+
 
 }

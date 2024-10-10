@@ -3,6 +3,7 @@ package com.igrowker.miniproject.services.implementations;
 import com.igrowker.miniproject.auth.service.AuthService;
 import com.igrowker.miniproject.dtos.PasswordDto;
 import com.igrowker.miniproject.dtos.UserDto;
+
 import com.igrowker.miniproject.dtos.req.UpdateUserDto;
 import com.igrowker.miniproject.exceptions.BadRequestException;
 import com.igrowker.miniproject.exceptions.NotFoundException;
@@ -23,6 +24,17 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Optional;
 
+import com.igrowker.miniproject.exceptions.BadRequestException;
+import com.igrowker.miniproject.exceptions.NotFoundException;
+import com.igrowker.miniproject.models.User;
+import com.igrowker.miniproject.repositories.UserRepository;
+import com.igrowker.miniproject.services.interfaces.UserService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -41,11 +53,12 @@ public class UserServiceImpl implements UserService {
         this.imageService = imageService;
     }
 
+
     @Override
     public UserDto getProfile(HttpHeaders headers) {
         Long userId = authService.getIdByLoguedUser(headers);
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Usuario no encontrado!"));
+                    .orElseThrow(() -> new NotFoundException("Usuario no encontrado!"));
 
         UserDto userDto = modelMapper.map(user, UserDto.class);
         userDto.setRole(user.getRole().getName());
@@ -166,5 +179,4 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException("Usuario con email "+  username + "no encontrado"));
         return !user.getGroups().isEmpty();
     }
-
 }
