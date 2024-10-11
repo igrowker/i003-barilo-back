@@ -127,6 +127,5 @@ public class DestinationServiceImpl implements DestinationService {
         return destinations.map(this::getDestinationAndPackages); // Todo los destinos y sus opciones
     }
 
-
 }
 
