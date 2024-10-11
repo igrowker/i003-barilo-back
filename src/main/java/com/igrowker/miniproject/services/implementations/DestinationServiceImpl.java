@@ -51,7 +51,48 @@ public class DestinationServiceImpl implements DestinationService {
     @Override
     public Page<MealDto> getMealsByDestinationId(Long destinationId, Pageable pageable) {
         return mealRepository.findAllByDestinationId(destinationId, pageable)
-                .map(meals -> modelMapper.map(meals, MealDto.class));
+                .map(meals -> {MealDto mealDto = modelMapper.map(meals, MealDto.class);
+                    mealDto.setImage(meals.getImageId() != null ? imageService.findByPublicId(meals.getImageId()).orElse(null) : null);
+                    return mealDto;
+                });
+    }
+
+    // Obtiene el destino y sus paquetes
+    public DestinationDto getDestinationAndPackages(Destination destination){
+        // Obtener todas las opciones asociadas al destino
+        List<TransportDto> transports = transportRepository.findAllByDestinationId(destination.getId()).stream()
+                .map(transport -> {TransportDto transportDto = modelMapper.map(transport, TransportDto.class);
+                    transportDto.setImage(transport.getImageId() != null ? imageService.findByPublicId(transport.getImageId()).orElse(null) : null);
+                    return transportDto;
+                }).collect(Collectors.toList());
+
+        List<AccommodationDto> accommodations = accommodationRepository.findAllByDestinationId(destination.getId()).stream()
+                .map(accommodation -> {AccommodationDto accommodationDto = modelMapper.map(accommodation, AccommodationDto.class);
+                    accommodationDto.setImage(accommodation.getImageId() != null ? imageService.findByPublicId(accommodation.getImageId()).orElse(null) : null);
+                    return accommodationDto;
+                }).collect(Collectors.toList());
+
+        List<MealDto> meals = mealRepository.findAllByDestinationId(destination.getId()).stream()
+                .map(meal -> {MealDto mealDto = modelMapper.map(meal, MealDto.class);
+                    mealDto.setImage(meal.getImageId() != null ? imageService.findByPublicId(meal.getImageId()).orElse(null) : null);
+                    return mealDto;
+                }).collect(Collectors.toList());
+
+        List<ActivityDto> activities = activityRepository.findAllByDestinationId(destination.getId()).stream()
+                .map(activity -> {ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
+                    activityDto.setImage(activity.getImageId() != null ? imageService.findByPublicId(activity.getImageId()).orElse(null) : null);
+                    return activityDto;
+                }).collect(Collectors.toList());
+        // Mapear cada destino a un DestinationDto incluyendo todas sus opciones
+        return DestinationDto.builder()
+                .id(destination.getId())
+                .name(destination.getName())
+                .city(destination.getCity())
+                .image(destination.getImageId() != null ? imageService.findByPublicId(destination.getImageId()).orElse(null) : null)
+                .activities(activities)
+                .accommodations(accommodations)
+                .transports(transports)
+                .meals(meals).build();
     }
 
     @Override
@@ -59,27 +100,7 @@ public class DestinationServiceImpl implements DestinationService {
         // Obtener destino por ID
         Destination destination = destinationRepository.findById(destinationId)
                 .orElseThrow(()-> new NotFoundException("Destino no encontrado!"));
-        // Obtener todas las opciones asociadas al destino
-        List<TransportDto> transports = transportRepository.findAllByDestinationId(destination.getId()).stream()
-                .map(transport -> modelMapper.map(transport, TransportDto.class)).collect(Collectors.toList());
-
-        List<AccommodationDto> accommodations = accommodationRepository.findAllByDestinationId(destination.getId()).stream()
-                .map(accommodation -> modelMapper.map(accommodation, AccommodationDto.class)).collect(Collectors.toList());
-
-        List<MealDto> meals = mealRepository.findAllByDestinationId(destination.getId()).stream()
-                .map(meal -> modelMapper.map(meal, MealDto.class)).collect(Collectors.toList());
-
-        List<ActivityDto> activities = activityRepository.findAllByDestinationId(destination.getId()).stream()
-                .map(activity -> modelMapper.map(activity, ActivityDto.class)).collect(Collectors.toList());
-
-        return DestinationDto.builder()
-                .id(destination.getId())
-                .name(destination.getName())
-                .city(destination.getCity())
-                .activities(activities)
-                .accommodations(accommodations)
-                .transports(transports)
-                .meals(meals).build();
+        return getDestinationAndPackages(destination); // Destino y sus opciones
     }
 
     @Override
@@ -87,27 +108,7 @@ public class DestinationServiceImpl implements DestinationService {
         // Buscar destino por nombre
         Destination destination = destinationRepository.findByName(name)
                 .orElseThrow(()-> new NotFoundException("Destino no encontrado"));
-        // Obtener todas las opciones asociadas al destino
-        List<TransportDto> transports = transportRepository.findAllByDestinationId(destination.getId()).stream()
-                .map(transport -> modelMapper.map(transport, TransportDto.class)).collect(Collectors.toList());
-
-        List<AccommodationDto> accommodations = accommodationRepository.findAllByDestinationId(destination.getId()).stream()
-                .map(accommodation -> modelMapper.map(accommodation, AccommodationDto.class)).collect(Collectors.toList());
-
-        List<MealDto> meals = mealRepository.findAllByDestinationId(destination.getId()).stream()
-                .map(meal -> modelMapper.map(meal, MealDto.class)).collect(Collectors.toList());
-
-        List<ActivityDto> activities = activityRepository.findAllByDestinationId(destination.getId()).stream()
-                .map(activity -> modelMapper.map(activity, ActivityDto.class)).collect(Collectors.toList());
-
-        return DestinationDto.builder()
-                .id(destination.getId())
-                .name(destination.getName())
-                .city(destination.getCity())
-                .activities(activities)
-                .accommodations(accommodations)
-                .transports(transports)
-                .meals(meals).build();
+        return getDestinationAndPackages(destination); // Destino y sus opciones
     }
 
     @Override
@@ -119,36 +120,7 @@ public class DestinationServiceImpl implements DestinationService {
             throw new NotFoundException("No se encontraron destinos para la ciudad: " + city);
         }
 
-        // Mapear cada destino a un DestinationDto incluyendo todas sus opciones
-        return destinations.map(destination -> {
-            // Obtener todas las opciones asociadas al destino
-            List<TransportDto> transports = transportRepository.findAllByDestinationId(destination.getId()).stream()
-                    .map(transport -> modelMapper.map(transport, TransportDto.class))
-                    .collect(Collectors.toList());
-
-            List<AccommodationDto> accommodations = accommodationRepository.findAllByDestinationId(destination.getId()).stream()
-                    .map(accommodation -> modelMapper.map(accommodation, AccommodationDto.class))
-                    .collect(Collectors.toList());
-
-            List<MealDto> meals = mealRepository.findAllByDestinationId(destination.getId()).stream()
-                    .map(meal -> modelMapper.map(meal, MealDto.class))
-                    .collect(Collectors.toList());
-
-            List<ActivityDto> activities = activityRepository.findAllByDestinationId(destination.getId()).stream()
-                    .map(activity -> modelMapper.map(activity, ActivityDto.class))
-                    .collect(Collectors.toList());
-
-            // Crear y retornar el DestinationDto
-            return DestinationDto.builder()
-                    .id(destination.getId())
-                    .name(destination.getName())
-                    .city(destination.getCity())
-                    .activities(activities)
-                    .accommodations(accommodations)
-                    .transports(transports)
-                    .meals(meals)
-                    .build();
-        });
+        return destinations.map(this::getDestinationAndPackages); // Todo los destinos y sus opciones
     }
 
 
