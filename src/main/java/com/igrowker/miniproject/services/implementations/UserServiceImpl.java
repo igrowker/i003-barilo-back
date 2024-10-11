@@ -53,7 +53,6 @@ public class UserServiceImpl implements UserService {
         this.imageService = imageService;
     }
 
-
     @Override
     public UserDto getProfile(HttpHeaders headers) {
         Long userId = authService.getIdByLoguedUser(headers);

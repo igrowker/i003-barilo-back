@@ -1,7 +1,7 @@
 services:
   back-api:
     container_name: barilo-back-api
-    build: .
+    build: ../../..
     image: barilo-back-api
     ports:
       - 8443:8443
