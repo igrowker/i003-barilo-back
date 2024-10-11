@@ -1,6 +1,7 @@
 package com.igrowker.miniproject.controllers;
 
 import com.igrowker.miniproject.dtos.ActivityDto;
+import com.igrowker.miniproject.dtos.DestinationDto;
 import com.igrowker.miniproject.dtos.MealDto;
 import com.igrowker.miniproject.services.interfaces.DestinationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,6 +46,27 @@ public class DestinationController {
                                                   @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(destinationService.getMealsByDestinationId(destinationId, pageable));
+    }
+
+    @Operation(summary = "Get destination by Id")
+    @GetMapping("/{destinationId}")
+    public ResponseEntity<DestinationDto> getDestinationById(@PathVariable Long destinationId) {
+        return ResponseEntity.ok(destinationService.getDestinationById(destinationId));
+    }
+
+    @Operation(summary = "Get destination by name")
+    @GetMapping("/name")
+    public ResponseEntity<DestinationDto> getDestinationsByName(@RequestParam String name) {
+        return ResponseEntity.ok(destinationService.getDestinationByName(name));
+    }
+
+    @Operation(summary = "Get all destination by city")
+    @GetMapping("/city")
+    public ResponseEntity<Page<DestinationDto>> getDestinationsByCity(@RequestParam String city,
+                                                                      @RequestParam(defaultValue = "0") int page,
+                                                                      @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(destinationService.getDestinationsByCity(city, pageable));
     }
 
 }
