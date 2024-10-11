@@ -22,7 +22,7 @@ public class TransportDto {
     private BigDecimal price;
     private String transportCategory;
     private TransportDestinationDto destination;
-    private LocalDateTime departureTime;
-    private LocalDateTime arrivalTime;
+    private LocalDateTime departureDate;
+    private LocalDateTime returnDate;
     private Image image;
 }
