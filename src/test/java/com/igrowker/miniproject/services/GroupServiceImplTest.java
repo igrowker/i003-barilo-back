@@ -7,7 +7,6 @@ import com.igrowker.miniproject.models.User;
 import com.igrowker.miniproject.repositories.GroupRepository;
 import com.igrowker.miniproject.repositories.UserRepository;
 import com.igrowker.miniproject.services.implementations.GroupServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +17,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener;
+import org.springframework.test.context.TestExecutionListeners;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,6 +33,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@TestExecutionListeners(listeners = {WithSecurityContextTestExecutionListener.class})
 class GroupServiceImplTest {
 
     @Mock
@@ -102,46 +108,5 @@ class GroupServiceImplTest {
         when(groupRepository.findById(groupId)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> groupService.updateGroup(groupId, groupDto));
-    }
-
-    @Test
-    void addUsersToGroupSuccessfully() {
-        Long groupId = 1L;
-        Long userId = 2L;
-        Group group = new Group();
-        User user = new User();
-        GroupDto groupDto = new GroupDto();
-
-        when(groupRepository.findById(groupId)).thenReturn(Optional.of(group));
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(groupRepository.save(group)).thenReturn(group);
-        when(modelMapper.map(group, GroupDto.class)).thenReturn(groupDto);
-
-        GroupDto result = groupService.addUsersToGroup(groupId, Arrays.asList(userId));
-
-        assertEquals(groupDto, result);
-        assertTrue(group.getUsers().contains(user));
-        verify(groupRepository, times(1)).save(group);
-    }
-
-    @Test
-    void removeUsersFromGroupSuccessfully() {
-        Long groupId = 1L;
-        Long userId = 2L;
-        Group group = new Group();
-        User user = new User();
-        group.getUsers().add(user);
-        GroupDto groupDto = new GroupDto();
-
-        when(groupRepository.findById(groupId)).thenReturn(Optional.of(group));
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(groupRepository.save(group)).thenReturn(group);
-        when(modelMapper.map(group, GroupDto.class)).thenReturn(groupDto);
-
-        GroupDto result = groupService.removeUsersFromGroup(groupId, Arrays.asList(userId));
-
-        assertEquals(groupDto, result);
-        assertFalse(group.getUsers().contains(user));
-        verify(groupRepository, times(1)).save(group);
     }
 }

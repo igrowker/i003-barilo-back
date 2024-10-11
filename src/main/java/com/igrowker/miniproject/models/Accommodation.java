@@ -1,7 +1,10 @@
 package com.igrowker.miniproject.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
@@ -23,6 +26,8 @@ public class Accommodation {
     private String type;
     @Column(nullable = false)
     private String description;
+    @Column
+    private String imageId;
     @ManyToOne
     @JoinColumn(name = "destination_id", nullable = false)
     private Destination destination;

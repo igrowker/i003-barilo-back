@@ -6,6 +6,7 @@ import com.igrowker.miniproject.dtos.MealDto;
 import com.igrowker.miniproject.repositories.ActivityRepository;
 import com.igrowker.miniproject.repositories.MealRepository;
 import com.igrowker.miniproject.services.interfaces.DestinationService;
+import com.igrowker.miniproject.services.interfaces.ImageService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +19,13 @@ import java.util.stream.Collectors;
 public class DestinationServiceImpl implements DestinationService {
 
     private final ActivityRepository activityRepository;
+    private final ImageService imageService;
     private final ModelMapper modelMapper;
     private final MealRepository mealRepository;
 
-    public DestinationServiceImpl(ActivityRepository activityRepository, ModelMapper modelMapper, MealRepository mealRepository) {
+    public DestinationServiceImpl(ActivityRepository activityRepository, ImageService imageService, ModelMapper modelMapper, MealRepository mealRepository) {
         this.activityRepository = activityRepository;
+        this.imageService = imageService;
         this.modelMapper = modelMapper;
         this.mealRepository = mealRepository;
     }
@@ -30,7 +33,11 @@ public class DestinationServiceImpl implements DestinationService {
     @Override
     public List<ActivityDto> getActivitiesByDestinationId(Long destinationId) {
         return activityRepository.findAllByDestinationId(destinationId)
-                .stream().map(activity -> modelMapper.map(activity, ActivityDto.class))
+                .stream().map(activity -> {
+                    ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
+                    activityDto.setImage(activity.getImageId() != null ? imageService.findByPublicId(activity.getImageId()).orElse(null) : null);
+                    return activityDto;
+                })
                 .collect(Collectors.toList());
     }
 

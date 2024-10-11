@@ -25,5 +25,7 @@ public class Meal {
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
-    private String type; 
+    private String type;
+    @Column
+    private String imageId;
 }
