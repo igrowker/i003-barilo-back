@@ -1,12 +1,11 @@
 package com.igrowker.miniproject.utils.Response;
 
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
+
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -24,5 +23,21 @@ public class SuccessResponse<T> {
     public SuccessResponse(T data, String message, HttpStatus status) {
         this(data, status);
         this.message = Optional.ofNullable(message);
+    }
+
+    public static <T> SuccessResponse<T> of(T data) {
+        return new SuccessResponse<T>(data, HttpStatus.OK);
+    }
+
+    public static <T> SuccessResponse<T> of(T data, HttpStatus status) {
+        return new SuccessResponse<T>(data, status);
+    }
+
+    public static <T> SuccessResponse<T> of(T data, String message) {
+        return new SuccessResponse<T>(data, message, HttpStatus.OK);
+    }
+
+    public static <T> SuccessResponse<T> of(T data, String message, HttpStatus status) {
+        return new SuccessResponse<T>(data, message, status);
     }
 }

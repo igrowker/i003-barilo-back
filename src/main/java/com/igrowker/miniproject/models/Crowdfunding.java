@@ -38,6 +38,9 @@ public class Crowdfunding {
     @OneToMany(mappedBy = "crowdfunding", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Donation> payments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "crowdfunding", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Donation> donations = new ArrayList<>();
+
     @PrePersist
     public void prePersist() {
         this.startDate = LocalDate.now();
