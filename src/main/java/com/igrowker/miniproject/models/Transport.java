@@ -34,7 +34,7 @@ public class Transport {
     private String companyName;
     @Column
     private String imageId;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime departureDate;
     @Column
     private LocalDateTime returnDate;
