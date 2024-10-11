@@ -29,6 +29,7 @@ public class DestinationServiceImpl implements DestinationService {
     private final TransportRepository transportRepository;
     private final AccommodationRepository accommodationRepository;
 
+
     public DestinationServiceImpl(ActivityRepository activityRepository, ImageService imageService, ModelMapper modelMapper, MealRepository mealRepository,
                                   DestinationRepository destinationRepository, TransportRepository transportRepository, AccommodationRepository accommodationRepository) {
         this.activityRepository = activityRepository;
