@@ -2,6 +2,7 @@ package com.igrowker.miniproject.models;
 
 import com.igrowker.miniproject.utils.TransportCategory;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,12 +35,17 @@ public class Transport {
     @Column
     private String imageId;
     @Column(nullable = false)
-    private LocalDateTime departureTime;
+    private LocalDateTime departureDate;
     @Column
-    private LocalDateTime arrivalTime;
+    private LocalDateTime returnDate;
 
     @PrePersist
     public void prePersist() {
-        this.departureTime = LocalDateTime.now();
+        this.departureDate = LocalDateTime.now();
+    }
+
+    @AssertTrue(message = "La fecha de regreso debe ser posterior a la fecha de ida")
+    public boolean isValidReturnDate() {
+        return returnDate.isAfter(departureDate);
     }
 }
