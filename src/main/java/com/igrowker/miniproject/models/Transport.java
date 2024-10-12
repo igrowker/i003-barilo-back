@@ -4,13 +4,17 @@ package com.igrowker.miniproject.models;
 import com.igrowker.miniproject.models.enums.TypeTransport;
 import com.igrowker.miniproject.utils.TransportCategory;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
-
 import java.time.LocalDateTime;
 
 
