@@ -64,4 +64,5 @@ public class GroupController {
     public ResponseEntity<GetGroupById> getGroupById(@PathVariable Long groupId) {
         return ResponseEntity.ok(groupService.getGroupById(groupId));
     }
+    
 }

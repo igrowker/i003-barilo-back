@@ -1,17 +1,15 @@
 package com.igrowker.miniproject.specifications;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.data.jpa.domain.Specification;
-
 import com.igrowker.miniproject.dtos.filters.TransportFilterDto;
 import com.igrowker.miniproject.models.Destination;
 import com.igrowker.miniproject.models.Transport;
-
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
+import org.springframework.data.jpa.domain.Specification;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransportSpecifications {
     private TransportSpecifications() {}
@@ -30,6 +28,10 @@ public class TransportSpecifications {
 
             if (filter.getTransportCategory() != null) {
                 predicates.add(builder.equal(root.get("transportCategory"), filter.getTransportCategory()));
+            }
+
+            if (filter.getType() != null) {
+                predicates.add(builder.equal(root.get("type"), filter.getType()));
             }
 
             Join<Transport, Destination> destinationJoin = root.join("destination");

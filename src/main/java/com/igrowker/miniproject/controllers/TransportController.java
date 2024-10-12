@@ -1,36 +1,27 @@
 package com.igrowker.miniproject.controllers;
 
+import com.igrowker.miniproject.dtos.TransportDto;
+import com.igrowker.miniproject.dtos.filters.TransportFilterDto;
+import com.igrowker.miniproject.dtos.req.CreateTransportDto;
+import com.igrowker.miniproject.models.enums.TypeTransport;
+import com.igrowker.miniproject.services.interfaces.TransportService;
+import com.igrowker.miniproject.utils.BigDecimalValidator;
+import com.igrowker.miniproject.utils.Response.SuccessResponse;
+import com.igrowker.miniproject.utils.TransportCategory;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.igrowker.miniproject.dtos.TransportDto;
-import com.igrowker.miniproject.dtos.filters.TransportFilterDto;
-import com.igrowker.miniproject.dtos.req.CreateTransportDto;
-import com.igrowker.miniproject.services.interfaces.TransportService;
-import com.igrowker.miniproject.utils.BigDecimalValidator;
-import com.igrowker.miniproject.utils.TransportCategory;
-import com.igrowker.miniproject.utils.Response.SuccessResponse;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/transports")
@@ -48,16 +39,17 @@ public class TransportController {
         })
         @GetMapping
         public ResponseEntity<SuccessResponse<PagedModel<TransportDto>>> getAllTransports(
-                        @Parameter(description = "Destination ID") @RequestParam(required = false) Long destinationId,
-                        @Parameter(description = "Transport name") @RequestParam(required = false) String name,
-                        @Parameter(description = "Transport price") @RequestParam(required = false) String price,
-                        @Parameter(description = "Destination name") @RequestParam(required = false) String destinationName,
-                        @Parameter(description = "Transport type" ) @RequestParam(required = false) TransportCategory transportCategory,
-                        @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
+                @Parameter(description = "Destination ID") @RequestParam(required = false) Long destinationId,
+                @Parameter(description = "Transport name") @RequestParam(required = false) String name,
+                @Parameter(description = "Transport price") @RequestParam(required = false) String price,
+                @Parameter(description = "Destination name") @RequestParam(required = false) String destinationName,
+                @Parameter(description = "Transport category") @RequestParam(required = false) TransportCategory transportCategory,
+                @Parameter(description = "Transport type") @RequestParam(required = false) TypeTransport type,
+                @PageableDefault(page = 0, size = 10, sort = "name") Pageable pageable) {
 
                 TransportFilterDto transportFilterDto = new TransportFilterDto(
                                 name, bigDecimalValidator.validateAndParse(price, "price"),
-                                destinationId, destinationName, transportCategory);
+                        destinationId, destinationName, transportCategory, type);
 
                 Page<TransportDto> transports = transportService.getAllTransports(transportFilterDto, pageable);
                 PagedModel<TransportDto> pagedModel = new PagedModel<>(transports);
