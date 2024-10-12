@@ -1,15 +1,18 @@
 package com.igrowker.miniproject.models;
 
+
+import com.igrowker.miniproject.models.enums.TypeTransport;
 import com.igrowker.miniproject.utils.TransportCategory;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.AssertTrue;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,6 +35,9 @@ public class Transport {
     private String transportCategory;
     @Column(nullable = false)
     private String companyName;
+    @Enumerated(EnumType.STRING)
+    @Column
+    private TypeTransport type;
     @Column
     private String imageId;
     @Column(nullable = false, columnDefinition = "timestamp default current_timestamp")

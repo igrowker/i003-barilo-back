@@ -1,5 +1,6 @@
 package com.igrowker.miniproject.dtos.filters;
 
+import com.igrowker.miniproject.models.enums.TypeTransport;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,5 @@ public class TransportFilterDto {
     private Long destinationId;
     private String destinationName;
     private TransportCategory transportCategory;
+    private TypeTransport type;
 }

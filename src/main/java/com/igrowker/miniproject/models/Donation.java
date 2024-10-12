@@ -1,5 +1,6 @@
 package com.igrowker.miniproject.models;
 
+import com.igrowker.miniproject.models.enums.DonationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 @Setter
 @Entity
 @Table(name = "donations")
@@ -32,8 +34,8 @@ public class Donation {
     private BigDecimal amount;
     @Column(nullable = false)
     private LocalDate date;
-    @Column(nullable = false)
-    private String status; // TODO enum, devuelto, pendiente, utilizado (o algo asi)
+    @Enumerated(EnumType.STRING)
+    private DonationStatus status; // TODO enum, devuelto, pendiente, utilizado (o algo asi)
     @ManyToOne
     @JoinColumn(name = "crowdfunding_id", nullable = false)
     private Crowdfunding crowdfunding;

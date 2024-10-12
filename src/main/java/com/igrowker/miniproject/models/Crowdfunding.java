@@ -1,10 +1,15 @@
 package com.igrowker.miniproject.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import lombok.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,8 +26,23 @@ public class Crowdfunding {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal collectedAmount;
     @Column(nullable = false)
+    private LocalDate startDate;
+    @Column(nullable = false)
     private LocalDate endDate;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+    @Column(columnDefinition = "boolean default true")
+    private boolean isActive;
+
+    @OneToMany(mappedBy = "crowdfunding", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Donation> payments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "crowdfunding", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Donation> donations = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        this.startDate = LocalDate.now();
+    }
 }
